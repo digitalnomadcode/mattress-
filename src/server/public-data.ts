@@ -1,11 +1,11 @@
 import { cache } from "react";
 import { products, type Product, type CatalogVariant } from "@/lib/catalog";
 import { storeContacts,storeLocations } from "@/lib/homepage-content";
-import { getDb } from "./db";
+import { getDb,databaseUrl } from "./db";
 import { z } from "zod";
 
 export const getPublicProducts=cache(async():Promise<Product[]>=>{
-  if(!process.env.DATABASE_URL) return products;
+  if(!databaseUrl()) return products;
   const rows=await getDb().product.findMany({where:{published:true},include:{translations:true,variants:{where:{active:true},include:{balance:true},orderBy:{widthCm:"asc"}}},orderBy:{model:"asc"}});
   const unknown=await getDb().unallocatedStock.findMany({where:{quantity:{gt:0}}});
   return rows.flatMap(row=>{
@@ -20,7 +20,7 @@ export const getPublicProducts=cache(async():Promise<Product[]>=>{
   });
 });
 export const getPublicSettings=cache(async()=>{
-  if(!process.env.DATABASE_URL) return {...storeContacts,locations:storeLocations,delivery:{ru:"",kk:""},address:{ru:"",kk:""}};
+  if(!databaseUrl()) return {...storeContacts,locations:storeLocations,delivery:{ru:"",kk:""},address:{ru:"",kk:""}};
   const settings=await getDb().storeSettings.findUnique({where:{id:"store"}});
   return {
     instagramUsername:settings?.instagramUsername||storeContacts.instagramUsername,

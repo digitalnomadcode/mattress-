@@ -3,6 +3,7 @@ import {readFile,readdir} from "node:fs/promises";
 import {Client} from "pg";
 
 export async function isolatedDatabase(){
+ if(process.env.VELORA_DATABASE_URL)throw new Error("Refusing integration tests while a deployment database override is configured");
  const original=process.env.DATABASE_URL;
  if(!original)throw new Error("Local DATABASE_URL required for integration tests");
  const url=new URL(original);if(!["127.0.0.1","localhost"].includes(url.hostname))throw new Error("Integration tests require local PostgreSQL; refusing external database");

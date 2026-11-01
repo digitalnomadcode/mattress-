@@ -2,7 +2,7 @@ import type { NextAuthOptions } from "next-auth";
 import { getServerSession } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { z } from "zod";
-import { getDb } from "./db";
+import { getDb,databaseUrl } from "./db";
 import { verifyPassword } from "./password";
 import { consumeRateLimit } from "./operations";
 import { BusinessError } from "./errors";
@@ -16,7 +16,7 @@ export const authOptions: NextAuthOptions = {
     credentials: { email: {label:"Email",type:"email"}, password:{label:"Password",type:"password"} },
     async authorize(raw, request) {
       const parsed=z.object({email:z.email().max(254),password:z.string().min(1).max(200)}).safeParse(raw);
-      if(!parsed.success || !process.env.DATABASE_URL) return null;
+      if(!parsed.success || !databaseUrl()) return null;
       const email=parsed.data.email.toLowerCase();
       const ip=String(request.headers?.["x-forwarded-for"] || "local").split(",")[0].trim();
       try {

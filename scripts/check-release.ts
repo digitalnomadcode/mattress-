@@ -1,5 +1,5 @@
 import {readdir} from "node:fs/promises";
-import {getDb} from "../src/server/db";
+import {getDb,databaseUrl} from "../src/server/db";
 import {normalizePhone} from "../src/lib/commerce";
 
 // Read-only release check. Supply the intended deployment's protected environment.
@@ -8,7 +8,7 @@ async function main(){
  const problems:string[]=[];
  const fail=(message:string)=>problems.push(message);
  let database:URL|undefined,origin:URL|undefined;
- try{database=new URL(process.env.DATABASE_URL||"");}catch{fail("DATABASE_URL is missing or invalid.");}
+ try{database=new URL(databaseUrl()||"");}catch{fail("DATABASE_URL is missing or invalid.");}
  try{origin=new URL(process.env.NEXTAUTH_URL||"");}catch{fail("NEXTAUTH_URL is missing or invalid.");}
  if(database){
   if(!["postgres:","postgresql:"].includes(database.protocol))fail("DATABASE_URL must use PostgreSQL.");

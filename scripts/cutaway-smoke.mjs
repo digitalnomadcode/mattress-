@@ -17,7 +17,7 @@ try {
     await page.evaluate(() => document.fonts.ready);
     await page.screenshot({ path: `${process.env.CUTAWAY_SCREENSHOT_PREFIX}-closed.png` });
   }
-  await page.evaluate(() => window.scrollTo({ top: 700, behavior: "instant" }));
+  await page.locator(".hero-scroll").evaluate(el => window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY + 420, behavior: "instant" }));
   await page.waitForFunction(() => Number(document.querySelector(".cutaway-root").dataset.progress) > .8);
   const after = await page.locator(".cutaway-layer").first().evaluate(el => getComputedStyle(el).transform);
   assert.notEqual(before, after, "scroll must change layer depth");

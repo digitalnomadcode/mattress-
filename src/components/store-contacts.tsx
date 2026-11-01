@@ -26,7 +26,7 @@ export function StoreContacts({ locale, contacts = storeContacts }: { locale: Lo
       value: phone ? contacts.phoneNumber : t.phonePending, external: false },
   ];
   return <section className="section contacts-section" id="contacts" aria-labelledby="contacts-title"><div className="container">
-    <div className="section-heading"><div><p className="eyebrow">08 / {t.contacts}</p><h2 id="contacts-title">{t.contactsTitle}</h2></div><p>{t.contactsIntro}</p></div>
+    <div className="section-heading"><div><p className="eyebrow">{t.contacts}</p><h2 id="contacts-title">{t.contactsTitle}</h2></div><p>{t.contactsIntro}</p></div>
     <div className="contacts-grid">{cards.map(({ id, title, text, Icon, href, value, external }) => <article key={id} className="contact-card" data-contact={id}>
       <Icon size={31} strokeWidth={1.3} aria-hidden="true"/>
       <h3>{title}</h3><p>{text}</p>

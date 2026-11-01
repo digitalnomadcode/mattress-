@@ -6,7 +6,7 @@ import type { Locale } from "@/lib/catalog";
 export function StorePresence({ locale }: { locale: Locale }) {
   const t = dictionary(locale);
   return <section className="presence-section section" id="locations"><div className="container">
-    <div className="section-heading"><div><p className="eyebrow">05 / {t.presenceEyebrow}</p><h2>{t.presenceTitle}</h2></div><p>{t.presenceIntro}</p></div>
+    <div className="section-heading"><div><p className="eyebrow">{t.presenceEyebrow}</p><h2>{t.presenceTitle}</h2></div><p>{t.presenceIntro}</p></div>
     <div className="city-grid">{storeLocations.map((location, i) => <article className="city-card" key={location.id}>
       <div className="city-card-top"><MapPin size={29} strokeWidth={1.3}/><span>0{i + 1} / KZ</span></div>
       <h3>{location.city[locale]}</h3>

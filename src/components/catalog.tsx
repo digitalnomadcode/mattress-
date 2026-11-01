@@ -21,7 +21,7 @@ export function Catalog({ locale, catalogProducts = products }: { locale: Locale
     <div className="product-grid">{visible.map((p) => <article key={p.model} className="product-card">
       <Link href={`/${locale}/catalog/${p.model}`} className="product-visual" aria-label={productTitle(p)}>
         <span className="height-tag">{p.height} {t.cm}</span>
-        <ProductPhoto photo={productPhotos[p.model][0]} alt={locale==="kk"?`${productTitle(p)} матрасы`:`Матрас ${productTitle(p)}`} sizes="(max-width: 768px) 48vw, 33vw"/>
+        <ProductPhoto photo={productPhotos[p.model][0]} alt={locale==="kk"?`${productTitle(p)} матрасы`:`Матрас ${productTitle(p)}`} sizes="(max-width: 480px) 100vw, 50vw"/>
         <span className="product-open"><ArrowUpRight size={21}/></span>
       </Link>
       <div className="product-meta"><span>{p.construction === "foam" ? t.foam : t.spring}</span><span>{p.variants.map(v => v.width).join(" / ")} {t.cm}</span></div>

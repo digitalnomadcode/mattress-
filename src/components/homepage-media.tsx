@@ -20,7 +20,7 @@ export function HomepageMedia({ locale }: { locale: Locale }) {
 export function HomepageReviews({ locale }: { locale: Locale }) {
   const t = dictionary(locale);
   return <section className="section customer-reviews" id="reviews" aria-labelledby="reviews-title"><div className="container">
-    <div className="section-heading"><div><p className="eyebrow">07 / {t.reviewsEyebrow}</p><h2 id="reviews-title">{t.reviewsTitle}</h2></div><p>{t.reviewsIntro}</p></div>
+    <div className="section-heading"><div><p className="eyebrow">{t.reviewsEyebrow}</p><h2 id="reviews-title">{t.reviewsTitle}</h2></div><p>{t.reviewsIntro}</p></div>
     {customerReviews.length > 0 ?
       <div className="review-grid">{customerReviews.map(review => <figure key={review.id}>
         <blockquote><p>{review.text[locale]}</p></blockquote>

@@ -12,6 +12,7 @@ import "../globals.css";
 import "../velora.css";
 import "../cutaway.css";
 import "../commerce.css";
+import "../editorial.css";
 
 export const dynamic = "force-dynamic";
 
@@ -48,7 +49,7 @@ export default async function LocaleLayout({ children, params }: {
     <html lang={locale} className={veloraSans.variable}>
       <body>
         <a href="#main" className="skip-link">{t.skip}</a>
-        <div className="topline"><div className="container topline-inner"><span><MapPin size={12} /> {t.location}</span><span>{t.preview}</span></div></div>
+        <div className="topline"><div className="container topline-inner"><span><MapPin size={12} /> {t.location}</span><span>{t.brandDescriptor}</span></div></div>
         <header className="header"><div className="container nav">
           <Link className="brand-link" href={`/${locale}`} aria-label="VELORA"><BrandLogo locale={locale}/></Link>
           <nav aria-label={t.catalog} className="nav-links">

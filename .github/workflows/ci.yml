@@ -1,0 +1,41 @@
+name: Checks
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine@sha256:266d3c257594e195b309ae9d1805e54c788f1d7b375f56bf6c367aac6c917e7b
+        env:
+          POSTGRES_USER: velora_ci
+          POSTGRES_PASSWORD: ephemeral_ci_only
+          POSTGRES_DB: velora_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U velora_ci -d velora_ci"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql://velora_ci:ephemeral_ci_only@127.0.0.1:5432/velora_ci
+      AUTH_SECRET: ephemeral-ci-only-signing-key-not-used-outside-tests
+      NEXTAUTH_URL: http://127.0.0.1:3100
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run db:generate
+      - run: npm run lint
+      - run: npm test
+      - run: npm run db:validate
+      - run: npm run test:integration
+      - run: npm run build
+      - run: npm run typecheck
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:store

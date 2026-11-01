@@ -1,0 +1,10 @@
+import { readFileSync, writeFileSync } from "node:fs";
+import { parse } from "dotenv";
+const path=".env.local";
+const text=readFileSync(path,"utf8");
+const config=parse(text);
+const url=new URL(config.DATABASE_URL);
+if(url.hostname!=="127.0.0.1" || !["/velora","/velora_store"].includes(url.pathname)) throw new Error("Not the known local development database");
+url.pathname="/velora_store";
+writeFileSync(path,text.replace(/^DATABASE_URL=.*$/m,`DATABASE_URL=${url.href}`),{mode:0o600});
+console.log("Selected velora_store on local PostgreSQL. The earlier empty database was preserved; nothing was deleted.");

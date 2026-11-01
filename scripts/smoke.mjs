@@ -48,12 +48,21 @@ async function main() {
       assert.equal(catalog.status(), 200);
       assert.equal(await page.locator(".product-card").count(), 5);
       assert.deepEqual(await page.locator(".product-title").allTextContents(), ["Велора Luna", "Велора Aria", "Велора Vita", "Велора Alba", "Велора Oro"]);
+      await page.waitForFunction(()=>Array.from(document.querySelectorAll(".product-visual img")).every(img=>img.complete&&img.naturalWidth>0));
       for (const model of ["2601", "2602", "2603", "2605", "2606"]) {
         const response = await page.goto(`${base}/${lang}/catalog/${model}`);
         assert.equal(response.status(),200);
         const names = { "2601": "Luna", "2602": "Aria", "2603": "Vita", "2605": "Alba", "2606": "Oro" };
         assert.equal(await page.locator("h1").textContent(), names[model]);
         assert.equal(await page.locator("html").getAttribute("lang"),lang);
+        await page.waitForFunction(()=>{const img=document.querySelector(".product-photo-plane img");return img?.complete&&img.naturalWidth>0;});
+        if(["2602","2603","2605"].includes(model)){
+          const before=await page.locator(".product-photo-plane img").getAttribute("src");
+          await page.locator(".product-photo-thumbs button").nth(1).click();
+          await page.waitForFunction(previous=>document.querySelector(".product-photo-plane img")?.getAttribute("src")!==previous,before);
+          await page.waitForFunction(()=>{const img=document.querySelector(".product-photo-plane img");return img?.complete&&img.naturalWidth>0;});
+          assert.equal(await page.locator(".product-photo-thumbs button").nth(1).getAttribute("aria-pressed"),"true");
+        }
       }
     }
     await page.goto(`${base}/ru/catalog/2601`);

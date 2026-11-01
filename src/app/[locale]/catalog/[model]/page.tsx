@@ -6,7 +6,7 @@ import { productTitle, localeSchema, modelCodes } from "@/lib/catalog";
 import { getPublicProducts, getPublicSettings } from "@/server/public-data";
 import { brandName } from "@/lib/brand";
 import { dictionary } from "@/lib/dictionary";
-import { MattressIllustration } from "@/components/mattress-illustration";
+import { ProductGallery } from "@/components/product-gallery";
 import { VariantSelector } from "@/components/variant-selector";
 
 type Props = { params: Promise<{ locale: string; model: string }> };
@@ -26,7 +26,7 @@ export default async function ProductPage({ params }: Props) {
   const settings = await getPublicSettings();
   return <main className="container product-page" id="main">
     <Link className="back-link" href={`/${locale}/catalog`}><ArrowLeft size={17}/>{t.back}</Link>
-    <div className="detail-grid"><div className="detail-visual"><MattressIllustration model={p.model} label={t.illustration}/><p>{t.illustration}</p></div>
+    <div className="detail-grid"><div className="detail-visual"><ProductGallery model={p.model} name={`${brandName} ${p.name}`} locale={locale}/></div>
       <div className="detail-copy"><p className="eyebrow">{brandName} / {p.construction === "foam" ? t.foam : t.spring}</p><h1>{p.name}</h1><p className="detail-description">{p.description[locale]}</p><div className="detail-model"><span>{t.model}</span><span>{p.model}</span></div><VariantSelector product={p} locale={locale} whatsappNumber={settings.whatsappNumber}/></div>
     </div>
     <section className="product-features"><h2>{t.featureTitle}</h2><div><ul>{p.features[locale].map(f => <li key={f}><Check size={18}/>{f}</li>)}</ul><p>{t.detailNote}</p></div></section>

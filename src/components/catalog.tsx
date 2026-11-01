@@ -5,7 +5,8 @@ import Link from "next/link";
 import { ArrowUpRight, ArrowRight } from "lucide-react";
 import { products, productTitle, formatPrice, type Locale } from "@/lib/catalog";
 import { dictionary } from "@/lib/dictionary";
-import { MattressIllustration } from "./mattress-illustration";
+import { ProductPhoto } from "./product-photo";
+import { productPhotos } from "@/lib/product-photos";
 
 export function Catalog({ locale, catalogProducts = products }: { locale: Locale; catalogProducts?: typeof products }) {
   const t = dictionary(locale);
@@ -20,7 +21,7 @@ export function Catalog({ locale, catalogProducts = products }: { locale: Locale
     <div className="product-grid">{visible.map((p) => <article key={p.model} className="product-card">
       <Link href={`/${locale}/catalog/${p.model}`} className="product-visual" aria-label={productTitle(p)}>
         <span className="height-tag">{p.height} {t.cm}</span>
-        <MattressIllustration model={p.model} label={t.illustration}/>
+        <ProductPhoto photo={productPhotos[p.model][0]} alt={locale==="kk"?`${productTitle(p)} матрасы`:`Матрас ${productTitle(p)}`} sizes="(max-width: 768px) 48vw, 33vw"/>
         <span className="product-open"><ArrowUpRight size={21}/></span>
       </Link>
       <div className="product-meta"><span>{p.construction === "foam" ? t.foam : t.spring}</span><span>{p.variants.map(v => v.width).join(" / ")} {t.cm}</span></div>

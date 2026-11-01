@@ -2,11 +2,14 @@ import { chromium } from "playwright";
 import assert from "node:assert/strict";
 
 async function main() {
+  const base = process.env.SMOKE_BASE_URL || "http://127.0.0.1:3000";
+  const external=!["127.0.0.1","localhost","[::1]"].includes(new URL(base).hostname);
+  const proxy=external&&process.env.HTTPS_PROXY?new URL(process.env.HTTPS_PROXY):null;
   const browser = await chromium.launch({
     headless: true,
     ...(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {}),
+    ...(proxy?{proxy:{server:proxy.origin,...(proxy.username?{username:decodeURIComponent(proxy.username),password:decodeURIComponent(proxy.password)}:{})}}:{}),
   });
-  const base = process.env.SMOKE_BASE_URL || "http://127.0.0.1:3000";
   const errors = [];
   const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
   page.on("pageerror", (error) => errors.push(error.message));
